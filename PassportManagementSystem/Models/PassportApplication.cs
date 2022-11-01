@@ -47,6 +47,9 @@ namespace PassportManagementSystem.Models
         public byte[] Photo { get; set; }
         [Required]
         public byte[] BirthCertificate { get; set; }
+        [Required]
+        public string Status { get; set; }
+        public string Comments { get; set; }
     
         public virtual UserRegistration UserRegistration { get; set; }
     }

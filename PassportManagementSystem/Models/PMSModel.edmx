@@ -4,9 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="PassportManagementSystemModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'PassportManagementSystem.dbo.City' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+    <Schema Namespace="PassportManagementSystemModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="PassportApplication">
           <Key>
             <PropertyRef Name="PassportNumber" />
@@ -26,6 +24,8 @@ warning 6002: The table/view 'PassportManagementSystem.dbo.City' does not have a
           <Property Name="ProofOfCitizenship" Type="varbinary(max)" Nullable="false" />
           <Property Name="Photo" Type="image" Nullable="false" />
           <Property Name="BirthCertificate" Type="varbinary(max)" Nullable="false" />
+          <Property Name="Status" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="Comments" Type="nvarchar(max)" />
         </EntityType>
         <EntityType Name="UserRegistration">
           <Key>
@@ -65,8 +65,7 @@ warning 6002: The table/view 'PassportManagementSystem.dbo.City' does not have a
             <End Role="PassportApplication" EntitySet="PassportApplication" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="PassportManagementSystemModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -90,6 +89,8 @@ warning 6002: The table/view 'PassportManagementSystem.dbo.City' does not have a
           <Property Name="Photo" Type="Binary" MaxLength="Max" FixedLength="false" Nullable="false" />
           <Property Name="BirthCertificate" Type="Binary" MaxLength="Max" FixedLength="false" Nullable="false" />
           <NavigationProperty Name="UserRegistration" Relationship="Self.FK_PassportUserID" FromRole="PassportApplication" ToRole="UserRegistration" />
+          <Property Name="Status" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Comments" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="UserRegistration">
           <Key>
@@ -139,6 +140,8 @@ warning 6002: The table/view 'PassportManagementSystem.dbo.City' does not have a
           <EntitySetMapping Name="PassportApplications">
             <EntityTypeMapping TypeName="PassportManagementSystemModel.PassportApplication">
               <MappingFragment StoreEntitySet="PassportApplication">
+                <ScalarProperty Name="Comments" ColumnName="Comments" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="PassportNumber" ColumnName="PassportNumber" />
                 <ScalarProperty Name="UserID" ColumnName="UserID" />
                 <ScalarProperty Name="Country" ColumnName="Country" />
