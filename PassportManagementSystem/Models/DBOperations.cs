@@ -70,7 +70,7 @@ namespace PassportManagementSystem.Models
             }
             return R;
         }
-        //This method checks seperately for 'Passport' whether the EmailId is already registered 
+        //This method checks seperately for 'Passport' whether the EmailId is already registered
         public static bool EmailValidation(UserRegistration R)
         {
             try
@@ -86,5 +86,74 @@ namespace PassportManagementSystem.Models
             catch (Exception) { }
             return false;
         }
+        //This method generates PassportNumber,RegistrationCost and ExpiryDate based on validations and conditions mentioned in the SRD and insert in database
+        public static PassportApplication ApplyPassport(PassportApplication PA)
+        {
+            try
+            {
+                string passportid = string.Empty;
+                //Calculates ExpiryDate based on IssueDate
+                DateTime expiryDate = PA.IssueDate.AddYears(10);
+
+                //Generates PassportNumber
+                if (PA.BookletType == "30 Pages")
+                {
+                    var fps30 = (from c in P.PassportApplications
+                                 select c.PassportNumber.Substring(c.PassportNumber.Length - 4, c.PassportNumber.Length)).Max();
+                    if (fps30 == null)
+                        fps30 = "0";
+                    passportid = "FPS-30" + string.Format("{0:0000}", int.Parse(fps30) + 1);
+                }
+                else if (PA.BookletType == "60 Pages")
+                {
+                    var fps60 = (from c in P.PassportApplications
+                                 select c.PassportNumber.Substring(c.PassportNumber.Length - 4, c.PassportNumber.Length)).Max();
+                    if (fps60 == null)
+                        fps60 = "0";
+                    passportid = "FPS-60" + string.Format("{0:0000}", int.Parse(fps60) + 1);
+                }
+
+                //Calculates RegistrationCost based on Type of Service
+                int registrationcost = 0;
+                if (PA.TypeOfService == "Regular")
+                    registrationcost = 2500;
+                else
+                    registrationcost = 5000;
+
+                //Inserting into database
+                PA.PassportNumber = passportid;
+                PA.ExpiryDate = expiryDate;
+                PA.Amount = registrationcost;
+                PA.ReasonForReIssue = "N/A";
+                PA.Status = "Initiated";
+
+                int usercount = (from c in P.PassportApplications
+                                 where c.UserID == PA.UserID
+                                 select c).Count();
+                if (usercount == 0)//Checks whether the user already registered or not
+                {
+                    P.PassportApplications.Add(PA);
+                    P.SaveChanges();
+                }
+                else
+                    return null;
+            }
+            catch (DbEntityValidationException e)
+            {
+                foreach (var eve in e.EntityValidationErrors)
+                {
+                    Console.WriteLine("Entity of type \"{0}\" in state \"{1}\" has the following validation errors:",
+                        eve.Entry.Entity.GetType().Name, eve.Entry.State);
+                    foreach (var ve in eve.ValidationErrors)
+                    {
+                        Console.WriteLine("- Property: \"{0}\", Error: \"{1}\"",
+                            ve.PropertyName, ve.ErrorMessage);
+                    }
+                }
+                throw;
+            }
+            return PA;
+        }
     }
+
 }
