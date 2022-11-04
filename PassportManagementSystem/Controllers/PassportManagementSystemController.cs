@@ -16,6 +16,16 @@ namespace PassportManagementSystem.Controllers
         {
             return View();
         }
+        //Displays About View
+        public ActionResult About()
+        {
+            return View();
+        }
+        //Displays Contact View
+        public ActionResult Contact()
+        {
+            return View();
+        }
         //Displays Register View
         public ActionResult Register()
         {
