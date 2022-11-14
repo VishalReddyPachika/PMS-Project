@@ -126,5 +126,29 @@ namespace PassportManagementSystem.Controllers
                 return View();
             }
         }
+        public FileResult DownloadFile(String userID, string identifier)
+        {
+            ApplicantDetails applicantDetails = DBOperations.Applicant(userID);
+            byte[] bytes;
+            if (identifier == "POC")
+            {
+                bytes = applicantDetails.passports.ProofOfCitizenship;
+                return File(bytes, "application/pdf", "Proof_Of_Citizenship_" + userID + ".pdf");
+            }
+            if (identifier == "BC")
+            {
+                bytes = applicantDetails.passports.BirthCertificate;
+                return File(bytes, "application/pdf", "Birth_Certificate_" + userID + ".pdf");
+            }
+            return null;
+        }
+        public ActionResult ApplicationStatus(String userID)
+        {
+            if (Session["UserID"] == null && Session["ApplyType"] == null && Session["EmailAddress"] == null)
+                return RedirectToAction("Login");
+            ViewBag.UserID = Session["UserID"];
+            ApplicantDetails applicantDetails = DBOperations.Applicant(userID);
+            return View(applicantDetails);
+        }
     }
 }

@@ -132,6 +132,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\ApplicantDetails.cs" />
     <Compile Include="Models\CustomDOB.cs" />
     <Compile Include="Models\CustomDOI.cs" />
     <Compile Include="Models\DBOperations.cs" />
@@ -1909,6 +1910,10 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Styles\About.css" />
+    <Content Include="Styles\ApplicationStatus.css" />
+    <Content Include="Styles\ApplyPassport.css" />
+    <Content Include="Styles\Contact.css" />
     <Content Include="Styles\Home.css" />
     <Content Include="Styles\HomeMasterPage.css" />
     <Content Include="Views\PassportManagementSystem\Home.cshtml" />
@@ -1927,6 +1932,10 @@
     <Content Include="Views\Web.config" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\PassportManagementSystem\Register.cshtml" />
+    <Content Include="Views\PassportManagementSystem\About.cshtml" />
+    <Content Include="Views\PassportManagementSystem\Contact.cshtml" />
+    <Content Include="Views\PassportManagementSystem\ApplyPassport.cshtml" />
+    <Content Include="Views\PassportManagementSystem\ApplicationStatus.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

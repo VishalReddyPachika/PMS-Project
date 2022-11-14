@@ -40,6 +40,9 @@
                 @Html.ActionLink("Apply Passport", "ApplyPassport", "PassportManagementSystem", null, new { @class = "nav-link" })
             </li>
             <li class="nav-item">
+                @Html.ActionLink("Application Status", "ApplicationStatus", "PassportManagementSystem", new { userID = @HttpContext.Current.Session["UserID"] }, new { @class = "nav-link" })
+            </li>
+            <li class="nav-item">
                 @Html.ActionLink("Passport Re-Issue", "PassportReIssue", "PassportManagementSystem", null, new { @class = "nav-link" })
             </li>
             <li class="nav-item">

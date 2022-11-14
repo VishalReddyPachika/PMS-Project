@@ -154,6 +154,26 @@ namespace PassportManagementSystem.Models
             }
             return PA;
         }
-    }
+        public static ApplicantDetails Applicant(String userID)
+        {
+            try
+            {
+                List<UserRegistration> users = P.UserRegistrations.ToList();
+                List<PassportApplication> passports = P.PassportApplications.ToList();
 
+                ApplicantDetails applicantDetails = (from c in passports
+                                                     join r in users on c.UserID equals r.UserID
+                                                     where r.UserID == userID
+                                                     select new ApplicantDetails
+                                                     {
+                                                         passports = c,
+                                                         users = r
+                                                     }).FirstOrDefault();
+
+                return applicantDetails;
+            }
+            catch (Exception) { }
+            return null;
+        }
+    }
 }
