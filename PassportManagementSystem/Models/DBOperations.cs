@@ -70,6 +70,59 @@ namespace PassportManagementSystem.Models
             }
             return R;
         }
+                //Displays Login View
+        //Session is used to remove that particular session when user logouts
+        public ActionResult Login(String message=null)
+        {
+            if (Session["EmailAddress"] != null && Session["ApplyType"] != null && Session["UserID"] != null)
+            {
+                Session.Abandon();
+                Session.Clear();
+            }
+            if(message != null)
+            {
+                ViewBag.success = message;
+            }
+            return View();
+        }
+        //When user submits the form in Login page it validates
+        //If validation is successfull then it goes to DBOperations Class and 
+        //fetches the data and session is created for userid and applytype
+        //based on applytype it redirects to that particular page
+        //Else it returns to the same view with validation messages
+        [HttpPost]
+        public ActionResult Login(UserRegistration R)
+        {         
+            if (ModelState.IsValidField("EmailAddress") && ModelState.IsValidField("Password"))
+            {
+                UserRegistration userdetails = DBOperations.Login(R);
+                if(userdetails!=null)
+                {
+                    Session["EmailAddress"] = userdetails.EmailAddress;
+                    Session["ApplyType"] = userdetails.ApplyType;
+                    Session["UserID"] = userdetails.UserID;
+                    if (userdetails.ApplyType == "Passport User")
+                    {
+                        Session["Welcome"] = userdetails.FirstName + " " + userdetails.LastName;
+                        return RedirectToAction("ApplyPassport");
+                    }
+                    else if (userdetails.ApplyType == "Admin")
+                    {
+                        Session["Welcome"] = userdetails.FirstName + " " + userdetails.LastName;
+                        return RedirectToAction("ApplicantDetails");
+                    }
+                }
+                else
+                {
+                    ViewBag.error = "Invalid Credentials";
+                    ModelState.Clear();
+                    return View();
+                }
+                return View();
+            }
+            else
+                return View();
+        }
         //This method checks seperately for 'Passport' whether the EmailId is already registered
         public static bool EmailValidation(UserRegistration R)
         {
