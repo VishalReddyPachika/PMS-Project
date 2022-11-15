@@ -66,6 +66,7 @@ namespace PassportManagementSystem.Controllers
         //If validation is successfull then it goes to DBOperations Class and
         //fetches the data and sends data or error messages to view
         [HttpPost]
+
         public ActionResult ApplyPassport([Bind(Exclude = "ProofOfCitizenship, Photo, BirthCertificate")] PassportApplication P, HttpPostedFileBase ProofOfCitizenship, HttpPostedFileBase Photo, HttpPostedFileBase BirthCertificate)
         {
             ModelState.Remove("ReasonForReIssue");
@@ -149,6 +150,78 @@ namespace PassportManagementSystem.Controllers
             ViewBag.UserID = Session["UserID"];
             ApplicantDetails applicantDetails = DBOperations.Applicant(userID);
             return View(applicantDetails);
+        }
+         public ActionResult ForgotPassword()
+        {
+            if (Session["EmailAddress"] != null)
+            {
+                Session.Abandon();
+                Session.Clear();
+            }
+            return View();
+        }
+         //When user submits the security question and answer then it validates
+        //If validation is successfull then it goes to DBOperations Class and 
+        //returns 'Success' and removes the 'Authentication' session and redirects to VisaCancellation
+        //else returns to same view
+        [HttpPost]
+        public ActionResult ForgotPassword(UserRegistration U)
+        {
+            if (ModelState.IsValidField("SecurityQuestion") && ModelState.IsValidField("SecurityAnswer") && ModelState.IsValidField("EmailAddress"))
+            {
+                string authentication = DBOperations.ForgotPassword(U);
+                if(authentication!= "Success")
+                {
+                    ModelState.Clear();
+                    ViewBag.error = authentication;
+                    return View();
+                }
+                else
+                { 
+                    ModelState.Clear();
+                    Session["EmailAddress"] = U.EmailAddress;
+                    return RedirectToAction("ResetPassword");
+                }
+            }
+            else
+                return View();
+        }
+        
+        public ActionResult ResetPassword()
+        {
+            if (Session["EmailAddress"] == null)
+                return RedirectToAction("Login");
+            return View();
+        }
+        //When user submits the security question and answer then it validates
+        //If validation is successfull then it goes to DBOperations Class and 
+        //returns 'Success' and removes the 'Authentication' session and redirects to VisaCancellation
+        //else returns to same view
+        [HttpPost]
+        public ActionResult ResetPassword([Bind(Exclude = "EmailAddress")] UserRegistration U)
+        {
+            if (ModelState.IsValidField("Password") && ModelState.IsValidField("ConfirmPassword"))
+            {
+                ModelState.Remove("ConfirmPassword");
+                ModelState.Remove("EmailAddress");
+                U.EmailAddress = (string)Session["EmailAddress"];
+                string resetpassword = DBOperations.ResetPassword(U);
+                if (resetpassword != "Success")
+                {
+                    ModelState.Clear();
+                    ViewBag.error = resetpassword;
+                    return View();
+                }
+                else
+                {
+                    ModelState.Clear();
+                    Session.Abandon();
+                    Session.Clear();
+                    return RedirectToAction("Login",null, new { message = "Password Updated Successfully"});
+                }
+            }
+            else
+                return View();
         }
     }
 }
