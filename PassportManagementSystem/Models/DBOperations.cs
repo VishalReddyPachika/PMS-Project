@@ -213,6 +213,79 @@ namespace PassportManagementSystem.Models
             catch (Exception) { }
             return null;
         }
+        //This method generates NewPassportNumber,ReIssueCost and ExpiryDate based on validations and conditions mentioned in the SRD and insert in database
+        //OldPassport data is also stored in database
+        public static PassportApplication PassportReIssue(PassportApplication PA)
+        {
+            try
+            {
+                string newpassportid = string.Empty;
+                //Calculates ExpiryDate based on IssueDate
+                DateTime expiryDate = PA.IssueDate.AddYears(10);
+
+                //Generates PassportNumber
+                if (PA.BookletType == "30 Pages")
+                {
+                    var fps30 = (from c in P.PassportApplications
+                                 select c.PassportNumber.Substring(c.PassportNumber.Length - 4, c.PassportNumber.Length)).Max();
+                    if (fps30 == null)
+                        fps30 = "0";
+                    newpassportid = "FPS-30" + string.Format("{0:0000}", int.Parse(fps30) + 1);
+                }
+                else if (PA.BookletType == "60 Pages")
+                {
+                    var fps60 = (from c in P.PassportApplications
+                                 select c.PassportNumber.Substring(c.PassportNumber.Length - 4, c.PassportNumber.Length)).Max();
+                    if (fps60 == null)
+                        fps60 = "0";
+                    newpassportid = "FPS-60" + string.Format("{0:0000}", int.Parse(fps60) + 1);
+                }
+
+                //Calculates ReIssueCost based on Type of Service
+                int reissuecost = 0;
+                if (PA.TypeOfService == "Regular")
+                    reissuecost = 1500;
+                else
+                    reissuecost = 3000;
+
+                //Checks for the OldPassportNumber in database
+                var oldpassport = (from c in P.PassportApplications
+                                   where c.PassportNumber == PA.PassportNumber && c.UserID == PA.UserID
+                                   select c).FirstOrDefault();
+
+                if (oldpassport != null)
+                {
+                    //Removes the OldPassportData and stores in 'OldPassportData' table using trigger in SQLServer
+                    P.PassportApplications.Remove(oldpassport);
+                    PA.PassportNumber = newpassportid;
+                    PA.ExpiryDate = expiryDate;
+                    PA.Amount = reissuecost;
+                    PA.Status = "Initiated";
+
+                    //Inserting New Passport details in database.
+                    P.PassportApplications.Add(PA);
+                    P.SaveChanges();
+                    return PA;
+                }
+                else
+                    return null;
+
+            }
+            catch (DbEntityValidationException e)
+            {
+                foreach (var eve in e.EntityValidationErrors)
+                {
+                    Console.WriteLine("Entity of type \"{0}\" in state \"{1}\" has the following validation errors:",
+                        eve.Entry.Entity.GetType().Name, eve.Entry.State);
+                    foreach (var ve in eve.ValidationErrors)
+                    {
+                        Console.WriteLine("- Property: \"{0}\", Error: \"{1}\"",
+                            ve.PropertyName, ve.ErrorMessage);
+                    }
+                }
+                throw;
+            }
+        }
         //Forgot password
         public static string ForgotPassword(UserRegistration U)
         {
