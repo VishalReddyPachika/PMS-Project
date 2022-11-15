@@ -160,11 +160,6 @@ namespace PassportManagementSystem.Controllers
             }
             return View();
         }
-        
-        @model PassportManagementSystem.Models.UserRegistration
-@{
-    ViewBag.Title = "Login";
-}
 
         //Displays Passport ReIssue View
         //DBOperations fetches state data on page load to view inorder to select state by the user
