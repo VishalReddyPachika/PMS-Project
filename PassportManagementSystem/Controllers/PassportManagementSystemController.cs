@@ -197,6 +197,128 @@ namespace PassportManagementSystem.Controllers
         }
     </center>
 }
+        //Displays Passport ReIssue View
+        //DBOperations fetches state data on page load to view inorder to select state by the user
+        //Used Session to restrict users to directly access the link without login
+        public ActionResult PassportReIssue()
+        {
+            if (Session["EmailAddress"] == null && Session["ApplyType"] == null && Session["UserID"] == null)
+                return RedirectToAction("Login");
+            ViewBag.UserID = Session["UserID"];
+            return View();
+        }
+        //When user submit the passport data for reissue it validates
+        //If validation is successfull then it goes to DBOperations Class and 
+        //fetches the data and sends data or error messages to view 
+        [HttpPost]
+        public ActionResult PassportReIssue([Bind(Exclude = "ProofOfCitizenship, Photo, BirthCertificate")] PassportApplication P, HttpPostedFileBase ProofOfCitizenship, HttpPostedFileBase Photo, HttpPostedFileBase BirthCertificate)
+        {
+            ModelState.Remove("ProofOfCitizenship");
+            ModelState.Remove("Photo");
+            ModelState.Remove("BirthCertificate");
+            ModelState.Remove("Status");
+            ModelState.Remove("Comments");
+            if (ModelState.IsValid)
+            {
+                ViewBag.UserID = Session["UserID"];
+                if (ProofOfCitizenship != null)
+                {
+                    int filelength = ProofOfCitizenship.ContentLength;
+                    byte[] Myfile_1 = new byte[filelength];
+                    ProofOfCitizenship.InputStream.Read(Myfile_1, 0, filelength);
+                    P.ProofOfCitizenship = Myfile_1;
+                }
+                else
+                {
+                    ViewBag.error = "Invalid File Format, Upload only PDF files";
+                }
+
+                if (Photo != null)
+                {
+                    int filelength = Photo.ContentLength;
+                    byte[] Myfile_2 = new byte[filelength];
+                    Photo.InputStream.Read(Myfile_2, 0, filelength);
+                    P.Photo = Myfile_2;
+                }
+                else
+                {
+                    ViewBag.error = "Invalid File Format, Upload only JPEG files";
+                }
+
+                if (BirthCertificate != null)
+                {
+                    int filelength = BirthCertificate.ContentLength;
+                    byte[] Myfile_3 = new byte[filelength];
+                    BirthCertificate.InputStream.Read(Myfile_3, 0, filelength);
+                    P.BirthCertificate = Myfile_3;
+                }
+                else
+                {
+                    ViewBag.error = "Invalid File Format, Upload only PDF files";
+                }
+                PassportApplication details = DBOperations.PassportReIssue(P);
+                if (details != null)
+                    ViewBag.data = details;
+                else
+                    ViewBag.error = "Passport Number w.r.t UserId doesn't exists";
+                ModelState.Clear();
+                return View();
+            }
+            else
+            {
+                ViewBag.UserID = Session["UserID"];
+                return View();
+            }
+        }
+        public ActionResult ApplicantDetails()
+        {
+            if (Session["UserID"] == null && Session["ApplyType"] == null && Session["EmailAddress"] == null)
+                return RedirectToAction("Login");
+            ViewBag.UserID = Session["UserID"];
+            List<ApplicantDetails> applicantDetails = DBOperations.ApplicantDetails();
+            return View(applicantDetails);
+        }
+        public ActionResult Applicant(String userID)
+        {
+            if (Session["UserID"] == null && Session["ApplyType"] == null && Session["EmailAddress"] == null)
+                return RedirectToAction("Login");
+            ViewBag.UserID = Session["UserID"];
+            ApplicantDetails applicantDetails = DBOperations.Applicant(userID);
+            return View(applicantDetails);
+        }
+        [HttpPost]
+        public ActionResult Applicant(String userID, String passportNum, FormCollection form)
+        {
+            String status = form["Status"];
+            String comments = form["Comments"];
+            ApplicantDetails applicantDetails = DBOperations.ApplicantStatus(userID, passportNum, status, comments);
+            ViewBag.data = applicantDetails;
+            return View(applicantDetails);
+        }
+        public FileResult DownloadFile(String userID, string identifier)
+        {
+            ApplicantDetails applicantDetails = DBOperations.Applicant(userID);
+            byte[] bytes;
+            if(identifier == "POC")
+            {
+                bytes = applicantDetails.passports.ProofOfCitizenship;
+                return File(bytes, "application/pdf", "Proof_Of_Citizenship_" + userID+".pdf");
+            }   
+            if(identifier == "BC")
+            {
+                bytes = applicantDetails.passports.BirthCertificate;
+                return File(bytes, "application/pdf", "Birth_Certificate_" + userID+".pdf");
+            }
+            return null;
+        }
+        public ActionResult ApplicationStatus(String userID)
+        {
+            if (Session["UserID"] == null && Session["ApplyType"] == null && Session["EmailAddress"] == null)
+                return RedirectToAction("Login");
+            ViewBag.UserID = Session["UserID"];
+            ApplicantDetails applicantDetails = DBOperations.Applicant(userID);
+            return View(applicantDetails);  
+        }
 
          //When user submits the security question and answer then it validates
         //If validation is successfull then it goes to DBOperations Class and 
