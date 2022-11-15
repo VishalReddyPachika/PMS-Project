@@ -175,5 +175,53 @@ namespace PassportManagementSystem.Models
             catch (Exception) { }
             return null;
         }
+        //Forgot password
+        public static string ForgotPassword(UserRegistration U)
+        {
+            try
+            {
+                UserRegistration UR = (from c in P.UserRegistrations
+                                       where c.EmailAddress == U.EmailAddress && c.SecurityQuestion == U.SecurityQuestion && c.SecurityAnswer == U.SecurityAnswer
+                                       select c).FirstOrDefault();
+                if (UR != null)
+                    return "Success";
+                else
+                    return "Your security question and answer doesn't match";
+            }
+            catch (Exception) { }
+            return null;
+        }
+        //Reset Password
+        public static string ResetPassword(UserRegistration U)
+        {
+            try
+            {
+                UserRegistration UR = (from c in P.UserRegistrations
+                                       where c.EmailAddress == U.EmailAddress
+                                       select c).FirstOrDefault();
+                UR.Password = U.Password;
+                UR.ConfirmPassword = U.Password;
+                P.Configuration.ValidateOnSaveEnabled = false;
+                P.SaveChanges();
+                if (UR != null)
+                    return "Success";
+                else
+                    return "Password Update UnSuccessfull";
+            }
+            catch (DbEntityValidationException e)
+            {
+                foreach (var eve in e.EntityValidationErrors)
+                {
+                    Console.WriteLine("Entity of type \"{0}\" in state \"{1}\" has the following validation errors:",
+                        eve.Entry.Entity.GetType().Name, eve.Entry.State);
+                    foreach (var ve in eve.ValidationErrors)
+                    {
+                        Console.WriteLine("- Property: \"{0}\", Error: \"{1}\"",
+                            ve.PropertyName, ve.ErrorMessage);
+                    }
+                }
+                throw;
+            }
+        }
     }
 }
