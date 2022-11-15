@@ -160,6 +160,44 @@ namespace PassportManagementSystem.Controllers
             }
             return View();
         }
+        
+        @model PassportManagementSystem.Models.UserRegistration
+@{
+    ViewBag.Title = "Login";
+}
+@using (Html.BeginForm("Login", "PassportManagementSystem"))
+{
+    <center>
+        <h2 style="margin-top:3%;margin-bottom:3%;">Login</h2>
+        <div class="form-group">
+            @Html.TextBoxFor(a => a.EmailAddress, new { @class = "form-control", @placeholder = "Email ID *" })
+            @Html.ValidationMessageFor(a => a.EmailAddress, "", new { @class = "text-danger" })
+        </div>
+        <div class="form-group">
+            @Html.PasswordFor(a => a.Password, new { @class = "form-control", @placeholder = "Password *" })
+            @Html.ValidationMessageFor(a => a.Password, "", new { @class = "text-danger" })
+        </div>
+        <div class="form-group" style="margin-left:-12%">
+            @Html.ActionLink("Forgot Password?", "ForgotPassword", "PassportManagementSystem", null, null)
+        </div>
+        <input type="submit" class="btn btn-primary" value="Login" style="margin-bottom:3%" />
+        @if (ViewBag.error != null)
+        {
+            <div class="alert alert-dismissible alert-danger" style="width:32%;margin-bottom:3%;padding-left:3%;">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <strong>@ViewBag.error</strong>
+            </div>
+        }
+        else if(ViewBag.success != null)
+        {
+            <div class="alert alert-dismissible alert-success" style="width:32%;margin-bottom:3%;padding-left:3%;">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <span>@ViewBag.success</span>
+            </div>
+        }
+    </center>
+}
+
          //When user submits the security question and answer then it validates
         //If validation is successfull then it goes to DBOperations Class and 
         //returns 'Success' and removes the 'Authentication' session and redirects to VisaCancellation
