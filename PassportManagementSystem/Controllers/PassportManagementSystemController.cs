@@ -352,5 +352,30 @@ namespace PassportManagementSystem.Controllers
             else
                 return View();
         }
+        public ActionResult ApplicantDetails()
+        {
+            if (Session["UserID"] == null && Session["ApplyType"] == null && Session["EmailAddress"] == null)
+                return RedirectToAction("Login");
+            ViewBag.UserID = Session["UserID"];
+            List<ApplicantDetails> applicantDetails = DBOperations.ApplicantDetails();
+            return View(applicantDetails);
+        }
+        public ActionResult Applicant(String userID)
+        {
+            if (Session["UserID"] == null && Session["ApplyType"] == null && Session["EmailAddress"] == null)
+                return RedirectToAction("Login");
+            ViewBag.UserID = Session["UserID"];
+            ApplicantDetails applicantDetails = DBOperations.Applicant(userID);
+            return View(applicantDetails);
+        }
+        [HttpPost]
+        public ActionResult Applicant(String userID, String passportNum, FormCollection form)
+        {
+            String status = form["Status"];
+            String comments = form["Comments"];
+            ApplicantDetails applicantDetails = DBOperations.ApplicantStatus(userID, passportNum, status, comments);
+            ViewBag.data = applicantDetails;
+            return View(applicantDetails);
+        }
     }
 }

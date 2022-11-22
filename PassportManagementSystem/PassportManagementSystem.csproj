@@ -1914,8 +1914,11 @@
     <Content Include="Styles\ApplicationStatus.css" />
     <Content Include="Styles\ApplyPassport.css" />
     <Content Include="Styles\Contact.css" />
+    <Content Include="Styles\ForgotPassword.css" />
     <Content Include="Styles\Home.css" />
     <Content Include="Styles\HomeMasterPage.css" />
+    <Content Include="Styles\PassportReIssue.css" />
+    <Content Include="Styles\ResetPassword.css" />
     <Content Include="Views\PassportManagementSystem\Home.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_DashboardLayout1.cshtml" />
@@ -1936,6 +1939,10 @@
     <Content Include="Views\PassportManagementSystem\Contact.cshtml" />
     <Content Include="Views\PassportManagementSystem\ApplyPassport.cshtml" />
     <Content Include="Views\PassportManagementSystem\ApplicationStatus.cshtml" />
+    <Content Include="Views\PassportManagementSystem\ResetPassword.cshtml" />
+    <Content Include="Views\PassportManagementSystem\PassportReIssue.cshtml" />
+    <Content Include="Views\PassportManagementSystem\Login.cshtml" />
+    <Content Include="Views\PassportManagementSystem\ForgotPassword.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
