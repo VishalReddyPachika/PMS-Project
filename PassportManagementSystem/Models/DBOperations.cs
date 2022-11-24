@@ -174,6 +174,29 @@ namespace PassportManagementSystem.Models
             return PA;
         }
 
+        public static List<ApplicantDetails> ApplicantDetails()
+        {
+            try
+            {
+                List<UserRegistration> users = P.UserRegistrations.ToList();
+                List<PassportApplication> passports = P.PassportApplications.ToList();
+
+                List<ApplicantDetails> applicantDetails = (from c in passports
+                                        join r in users on c.UserID equals r.UserID
+                                        where r.ApplyType != "Admin" && c.Status == "Initiated"
+                                        orderby c.IssueDate descending
+                                        select new ApplicantDetails
+                                        {
+                                            passports = c,
+                                            users = r
+                                        }).ToList();
+
+                return applicantDetails;
+            }
+            catch (Exception) { }
+            return null;
+        }        
+        
         public static ApplicantDetails Applicant(String userID)
         {
             try
@@ -195,6 +218,33 @@ namespace PassportManagementSystem.Models
             catch (Exception) { }
             return null;
         }
+        
+        public static ApplicantDetails ApplicantStatus(String userID, String passportNum, String status, String comments)
+        {
+            try
+            {
+                List<UserRegistration> users = P.UserRegistrations.ToList();
+                List<PassportApplication> passports = P.PassportApplications.ToList();
+
+                ApplicantDetails applicantDetails = (from c in passports
+                                                     join r in users on c.UserID equals r.UserID
+                                                     where c.UserID == userID && c.PassportNumber == passportNum
+                                                     select new ApplicantDetails
+                                                     {
+                                                         passports = c,
+                                                         users = r
+                                                     }).FirstOrDefault();
+
+                applicantDetails.passports.Status = status;
+                applicantDetails.passports.Comments = comments;
+                P.Configuration.ValidateOnSaveEnabled = false;
+                P.SaveChanges();
+                return applicantDetails;
+            }
+            catch (Exception) { }
+            return null;
+        }        
+        
         //This method generates NewPassportNumber,ReIssueCost and ExpiryDate based on validations and conditions mentioned in the SRD and insert in database
         //OldPassport data is also stored in database
         public static PassportApplication PassportReIssue(PassportApplication PA)
