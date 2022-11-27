@@ -1911,6 +1911,8 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="Styles\About.css" />
+    <Content Include="Styles\Applicant.css" />
+    <Content Include="Styles\ApplicantDetails.css" />
     <Content Include="Styles\ApplicationStatus.css" />
     <Content Include="Styles\ApplyPassport.css" />
     <Content Include="Styles\Contact.css" />
@@ -1943,6 +1945,8 @@
     <Content Include="Views\PassportManagementSystem\PassportReIssue.cshtml" />
     <Content Include="Views\PassportManagementSystem\Login.cshtml" />
     <Content Include="Views\PassportManagementSystem\ForgotPassword.cshtml" />
+    <Content Include="Views\PassportManagementSystem\Applicant.cshtml" />
+    <Content Include="Views\PassportManagementSystem\ApplicantDetails.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
