@@ -15,7 +15,7 @@
           <Property Name="State" Type="nvarchar" MaxLength="20" Nullable="false" />
           <Property Name="City" Type="nvarchar" MaxLength="20" Nullable="false" />
           <Property Name="Zip" Type="nvarchar" MaxLength="10" Nullable="false" />
-          <Property Name="TypeOfService" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="TypeOfService" Type="nvarchar" MaxLength="20" Nullable="false" />
           <Property Name="BookletType" Type="nvarchar" MaxLength="10" Nullable="false" />
           <Property Name="IssueDate" Type="date" Nullable="false" />
           <Property Name="ExpiryDate" Type="date" Nullable="false" />
@@ -79,7 +79,7 @@
           <Property Name="State" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="City" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Zip" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="TypeOfService" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="TypeOfService" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="BookletType" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="IssueDate" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="ExpiryDate" Type="DateTime" Nullable="false" Precision="0" />

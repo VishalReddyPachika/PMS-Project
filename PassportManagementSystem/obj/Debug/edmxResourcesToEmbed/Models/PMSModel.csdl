@@ -10,7 +10,7 @@
     <Property Name="State" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
     <Property Name="City" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
     <Property Name="Zip" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
-    <Property Name="TypeOfService" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="TypeOfService" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
     <Property Name="BookletType" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
     <Property Name="IssueDate" Type="DateTime" Nullable="false" Precision="0" />
     <Property Name="ExpiryDate" Type="DateTime" Nullable="false" Precision="0" />
@@ -20,6 +20,8 @@
     <Property Name="Photo" Type="Binary" MaxLength="Max" FixedLength="false" Nullable="false" />
     <Property Name="BirthCertificate" Type="Binary" MaxLength="Max" FixedLength="false" Nullable="false" />
     <NavigationProperty Name="UserRegistration" Relationship="Self.FK_PassportUserID" FromRole="PassportApplication" ToRole="UserRegistration" />
+    <Property Name="Status" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="Comments" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
   </EntityType>
   <EntityType Name="UserRegistration">
     <Key>

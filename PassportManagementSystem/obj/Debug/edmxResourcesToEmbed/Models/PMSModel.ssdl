@@ -1,7 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Schema Namespace="PassportManagementSystemModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
-  <!--Errors Found During Generation:
-warning 6002: The table/view 'PassportManagementSystem.dbo.City' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
   <EntityType Name="PassportApplication">
     <Key>
       <PropertyRef Name="PassportNumber" />
@@ -12,7 +10,7 @@ warning 6002: The table/view 'PassportManagementSystem.dbo.City' does not have a
     <Property Name="State" Type="nvarchar" MaxLength="20" Nullable="false" />
     <Property Name="City" Type="nvarchar" MaxLength="20" Nullable="false" />
     <Property Name="Zip" Type="nvarchar" MaxLength="10" Nullable="false" />
-    <Property Name="TypeOfService" Type="nvarchar" MaxLength="10" Nullable="false" />
+    <Property Name="TypeOfService" Type="nvarchar" MaxLength="20" Nullable="false" />
     <Property Name="BookletType" Type="nvarchar" MaxLength="10" Nullable="false" />
     <Property Name="IssueDate" Type="date" Nullable="false" />
     <Property Name="ExpiryDate" Type="date" Nullable="false" />
@@ -21,6 +19,8 @@ warning 6002: The table/view 'PassportManagementSystem.dbo.City' does not have a
     <Property Name="ProofOfCitizenship" Type="varbinary(max)" Nullable="false" />
     <Property Name="Photo" Type="image" Nullable="false" />
     <Property Name="BirthCertificate" Type="varbinary(max)" Nullable="false" />
+    <Property Name="Status" Type="nvarchar" MaxLength="20" Nullable="false" />
+    <Property Name="Comments" Type="nvarchar(max)" />
   </EntityType>
   <EntityType Name="UserRegistration">
     <Key>

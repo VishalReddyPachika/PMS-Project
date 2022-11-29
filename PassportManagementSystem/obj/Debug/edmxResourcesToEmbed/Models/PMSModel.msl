@@ -4,6 +4,8 @@
     <EntitySetMapping Name="PassportApplications">
       <EntityTypeMapping TypeName="PassportManagementSystemModel.PassportApplication">
         <MappingFragment StoreEntitySet="PassportApplication">
+          <ScalarProperty Name="Comments" ColumnName="Comments" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
           <ScalarProperty Name="PassportNumber" ColumnName="PassportNumber" />
           <ScalarProperty Name="UserID" ColumnName="UserID" />
           <ScalarProperty Name="Country" ColumnName="Country" />

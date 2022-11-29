@@ -128,6 +128,8 @@ namespace PassportManagementSystem.Controllers
             ModelState.Remove("ProofOfCitizenship");
             ModelState.Remove("Photo");
             ModelState.Remove("BirthCertificate");
+            ModelState.Remove("Status");
+            ModelState.Remove("Comments");
             if (ModelState.IsValid)
             {
                 ViewBag.UserID = Session["UserID"];
